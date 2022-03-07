@@ -9,12 +9,12 @@ class Customer {
         string name;
         string address;
         int age;
-        string telephone_number;
+        int telephone_number;
         string customer_number;
     
     public:
         // constructor
-        Customer(string name, string address, int age, string telephone_number, string customer_number)
+        Customer(string name, string address, int age, int telephone_number, string customer_number)
         {
             this->name = name;
             this->address = address;
@@ -36,7 +36,7 @@ class Customer {
         void set_age(int age) { age = age; }
 
         // accessor and modifier for telephone number
-        string get_telephone_number() { return this->telephone_number; }
+        int get_telephone_number() { return this->telephone_number; }
         void set_telephone_number(string telephone_number) { telephone_number = telephone_number; }
 
         // accessor and modifier for customer number
@@ -90,7 +90,7 @@ class Account {
         Transaction transactions[10];
     
     public:
-        void create_account(string name, string address, int age, string telephone_number, string customer_number) {
+        void create_account(string name, string address, int age, int telephone_number, string customer_number) {
             this->account_number++;
             customer = new Customer(name, address, age, telephone_number, customer_number);
         }
@@ -110,11 +110,21 @@ class Account {
 
 // children classes of Account
 class Savings_Account: public Account {
+    public:
+        void deposit() {}
 
+        void withdraw() {}
+
+        void add_interest() {}
 };
 
 class Checking_Account: public Account {
+    public:
+        void deposit() {}
 
+        void withdraw() {}
+
+        void add_interest() {}
 };
 
 
@@ -122,20 +132,92 @@ class Checking_Account: public Account {
 class Bank {
     private:
         Account accounts[10];
+
+    private:
+        string customer_number_generator(string customer_type) {
+            static int counter = 0;
+            counter++;
+            string customer_number = to_string(counter) + customer_type; 
+            return customer_number;
+        }
     
     public:
-        void add_account() {}
+        void add_account() { 
+            string name;
+            string address;
+            int age;
+            int phone_number;
 
-        void make_deposit() {}
+            cout << "Enter Customer Name> ";
+            cin >> name;
 
-        void make_withdrawal() {}
+            cout << "Enter Customer Address> ";
+            cin >> address;
 
-        void get_account() {}
+            cout << "Enter Customer Age> ";
+            cin >> age;
+
+            cout << "Enter Customer Phone Number> ";
+            cin >> phone_number;
+            
+            int customer_type;
+            string customer_number;
+
+            cout << "Select:" << endl;
+            cout << "0: Senior" << endl;
+            cout << "1: Adult" << endl;
+            cout << "2: Student" << endl;
+            cin >> customer_type;
+
+            if (customer_type == 0) {
+                customer_number = customer_number_generator("SEN");
+            } else if (customer_type == 1) {
+                customer_number = customer_number_generator("ADU");
+            } else if (customer_type == 2) {
+                customer_number = customer_number_generator("STU");
+            }
+
+            Account a;
+
+            a.create_account(name, address, age, phone_number, "1");
+        }
+
+        void make_deposit() { cout << "make_deposit()" << endl; }
+
+        void make_withdrawal() { cout << "make_withdrawal()" << endl; }
+
+        void get_account() { cout << "check_account()" << endl; }
 };
 
+void program_loop() {
+    Bank b;
+    int i;
 
+    while (i != 4) {
+        cout << "Select:" << endl;
+        cout << "0: Add Account" << endl;
+        cout << "1: Make Deposit" << endl;
+        cout << "2. Make Withdrawal:" << endl;
+        cout << "3. Check Account:" << endl;
+        cout << "4. Exit" << endl;
+        
+        cin >> i;
+
+        if (i == 0) {
+            b.add_account();
+        } else if (i == 1) {
+            b.make_deposit();
+        } else if (i == 2) {
+            b.make_withdrawal();
+        } else if (i == 3) {
+            b.get_account();
+        }
+    }
+}
+
+// driver class
 int main() {
-
+    program_loop();
 
     return 0;
 }
